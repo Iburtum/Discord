@@ -9,17 +9,22 @@ const DEFAULT_CONFIG = {
   aiChannels: {},
 };
 
+/** In-memory cache so we only read disk once at startup. */
+let cache = null;
+
 /**
- * Load the config from disk (or return defaults).
+ * Load the config from disk (or return defaults). Uses an in-memory cache.
  * @returns {object}
  */
 function load() {
+  if (cache) return cache;
   try {
     const raw = fs.readFileSync(CONFIG_PATH, "utf-8");
-    return { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
+    cache = { ...DEFAULT_CONFIG, ...JSON.parse(raw) };
   } catch {
-    return { ...DEFAULT_CONFIG };
+    cache = { ...DEFAULT_CONFIG };
   }
+  return cache;
 }
 
 /**
@@ -27,6 +32,7 @@ function load() {
  * @param {object} cfg
  */
 function save(cfg) {
+  cache = cfg;
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(cfg, null, 2));
 }
 
