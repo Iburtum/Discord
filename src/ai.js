@@ -5,7 +5,7 @@ const { SYSTEM_PROMPT } = require("./knowledge");
 const { searchWiki } = require("./search");
 
 const ENDPOINT = "https://models.github.ai/inference";
-const MODEL = "openai/gpt-4.1-mini";
+const MODEL = "openai/gpt-4.1";
 
 /**
  * Reply sent to the user when the AI model filters/blocks the response.
@@ -22,7 +22,7 @@ const FILTERED_REPLY =
 const conversationHistory = new Map();
 
 /** Maximum number of back-and-forth exchanges to remember per user. */
-const MAX_HISTORY_TURNS = 8; // 8 user + 8 assistant = 16 messages
+const MAX_HISTORY_TURNS = 12; // 12 user + 12 assistant = 24 messages
 
 /**
  * Clear the stored conversation history for a user.
@@ -82,11 +82,11 @@ async function chat(userMessage, { useWiki = true, userId = null } = {}) {
         ...history,
         { role: "user", content: userMessage },
       ],
-      temperature: 0.7,
-      top_p: 1,
-      // 2048 tokens allows richer, well-formatted Discord replies and handles
+      temperature: 0.8,
+      top_p: 0.95,
+      // 3000 tokens allows richer, well-formatted Discord replies and handles
       // longer conversation history without truncating the response.
-      max_tokens: 2048,
+      max_tokens: 3000,
       model: MODEL,
     },
   });
