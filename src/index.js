@@ -1,3 +1,10 @@
+// Polyfill globalThis.crypto for Node.js versions where it is not a global.
+// @typespec/ts-http-runtime (used by @azure-rest/ai-inference) requires it.
+if (!globalThis.crypto) {
+  const nodeCrypto = require("node:crypto");
+  globalThis.crypto = nodeCrypto.webcrypto ?? nodeCrypto;
+}
+
 require("dotenv").config();
 
 const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
