@@ -17,7 +17,7 @@ module.exports = {
 
     try {
       const question = interaction.options.getString("question");
-      const answer = await chat(question);
+      const answer = await chat(question, { userId: interaction.user.id });
       // Discord messages are capped at 2000 characters
       const trimmed = answer.length > 2000 ? answer.slice(0, 1997) + "..." : answer;
       await interaction.editReply(trimmed);
