@@ -1,6 +1,6 @@
-# brt — Discord AI Assistant Bot
+# iburtum — Discord AI Assistant Bot
 
-A bilingual (Arabic / English) Discord bot that answers questions about EliteMobs and the Minecraft server **mine.iburtum.dev**.
+A bilingual (Arabic / English) Discord bot that answers questions about EliteMobs and the Minecraft server **Ramadan Craft** (`mc.iburtum.dev`).
 
 ## Features
 
