@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { SERVER_IP } = require("../knowledge");
+const { SERVER_IP, SERVER_NAME } = require("../knowledge");
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -8,7 +8,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply(
-      `🟢 **سيرفر ماينكرافت — Minecraft Server**\n` +
+      `🟢 **${SERVER_NAME} — Minecraft Server**\n` +
       `📡 **IP:** \`${SERVER_IP}\`\n` +
       `🎮 **Java Edition**\n\n` +
       `ادخل السيرفر وابدأ مغامرتك!\n` +

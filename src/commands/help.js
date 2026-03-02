@@ -7,7 +7,7 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply(
-      `📖 **أوامر بوت brt — brt Bot Commands**\n\n` +
+      `📖 **أوامر بوت iburtum — iburtum Bot Commands**\n\n` +
       `\`/setup\` — إعداد قناة المساعد الذكي (مشرفين فقط)\n` +
       `\`/ask\` — اسأل المساعد الذكي عن EliteMobs\n` +
       `\`/server\` — معلومات السيرفر و IP\n` +
