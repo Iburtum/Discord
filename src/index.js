@@ -7,7 +7,7 @@ if (!globalThis.crypto) {
 
 require("dotenv").config();
 
-const { Client, Collection, Events, GatewayIntentBits } = require("discord.js");
+const { Client, Collection, Events, GatewayIntentBits, MessageFlags } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
 const config = require("./config");
@@ -48,7 +48,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const reply = {
       content:
         "❌ حدث خطأ أثناء تنفيذ الأمر.\n❌ An error occurred while executing this command.",
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     };
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp(reply);

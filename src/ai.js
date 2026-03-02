@@ -33,7 +33,11 @@ async function chat(userMessage) {
   });
 
   if (isUnexpected(response)) {
-    throw new Error(response.body.error?.message || "AI request failed");
+    const body = response.body;
+    const detail =
+      body?.error?.message ||
+      (typeof body === "string" ? body : JSON.stringify(body));
+    throw new Error(`AI request failed (${response.status}): ${detail}`);
   }
 
   return response.body.choices[0].message.content;

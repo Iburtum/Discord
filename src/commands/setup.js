@@ -1,4 +1,4 @@
-const { SlashCommandBuilder, ChannelType, PermissionFlagsBits } = require("discord.js");
+const { SlashCommandBuilder, ChannelType, PermissionFlagsBits, MessageFlags } = require("discord.js");
 const config = require("../config");
 
 module.exports = {
@@ -22,7 +22,7 @@ module.exports = {
       content:
         `✅ تم تعيين قناة المساعد الذكي إلى ${channel}\n` +
         `✅ AI assistant channel set to ${channel}`,
-      ephemeral: true,
+      flags: MessageFlags.Ephemeral,
     });
   },
 };
