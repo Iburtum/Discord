@@ -1,6 +1,5 @@
 const ModelClient = require("@azure-rest/ai-inference").default;
 const { isUnexpected } = require("@azure-rest/ai-inference");
-const { AzureKeyCredential } = require("@azure/core-auth");
 const { SYSTEM_PROMPT } = require("./knowledge");
 
 const ENDPOINT = "https://models.github.ai/inference";
@@ -17,7 +16,14 @@ async function chat(userMessage) {
     throw new Error("GITHUB_TOKEN is not set");
   }
 
-  const client = ModelClient(ENDPOINT, new AzureKeyCredential(token));
+  const credential = {
+    getToken: async () => ({
+      token,
+      expiresOnTimestamp: Date.now() + 3600 * 1000,
+    }),
+  };
+
+  const client = ModelClient(ENDPOINT, credential);
 
   const response = await client.path("/chat/completions").post({
     body: {
