@@ -66,17 +66,25 @@ client.on(Events.MessageCreate, async (message) => {
   const aiChannelId = config.getAiChannel(message.guild.id);
   if (!aiChannelId || message.channel.id !== aiChannelId) return;
 
-  // Show typing indicator while generating a response
-  await message.channel.sendTyping();
+  // Send a visible loading message while the AI generates its response
+  const loadingMsg = await message.reply("`. . .`");
+
+  // Keep the typing indicator alive for the duration of the request
+  const typingInterval = setInterval(
+    () => message.channel.sendTyping().catch(() => {}),
+    9000
+  );
 
   try {
-    const answer = await chat(message.content);
+    const answer = await chat(message.content, { userId: message.author.id });
+    clearInterval(typingInterval);
     // Discord messages are capped at 2000 characters
     const trimmed = answer.length > 2000 ? answer.slice(0, 1997) + "..." : answer;
-    await message.reply(trimmed);
+    await loadingMsg.edit(trimmed);
   } catch (err) {
+    clearInterval(typingInterval);
     console.error("AI channel error:", err);
-    await message.reply(
+    await loadingMsg.edit(
       "❌ حدث خطأ أثناء معالجة رسالتك. حاول مرة أخرى.\n" +
       "❌ An error occurred while processing your message. Please try again."
     );

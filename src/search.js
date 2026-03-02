@@ -7,7 +7,7 @@ const http = require("node:http");
 
 const WIKI_BASE = "https://wiki.nightbreak.io";
 const SEARCH_TIMEOUT_MS = 6000;
-const MAX_CONTENT_CHARS = 1500;
+const MAX_CONTENT_CHARS = 3000;
 
 /**
  * Fetch a URL, following up to `redirectsLeft` redirects, with a timeout.

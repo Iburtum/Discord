@@ -16,14 +16,32 @@ const FILTERED_REPLY =
   "⚠️ Sorry, I couldn't answer that one — it was flagged by content filters. Try rephrasing your question! 😅";
 
 /**
+ * Per-user conversation history (in-memory).
+ * Key: userId string, Value: array of {role, content} message objects.
+ */
+const conversationHistory = new Map();
+
+/** Maximum number of back-and-forth exchanges to remember per user. */
+const MAX_HISTORY_TURNS = 8; // 8 user + 8 assistant = 16 messages
+
+/**
+ * Clear the stored conversation history for a user.
+ * @param {string} userId
+ */
+function clearHistory(userId) {
+  conversationHistory.delete(userId);
+}
+
+/**
  * Send a user message to the AI model and return the assistant reply.
  * Optionally fetches fresh context from the EliteMobs wiki first.
+ * Maintains per-user conversation history when a userId is provided.
  *
  * @param {string} userMessage
- * @param {{ useWiki?: boolean }} [options]
+ * @param {{ useWiki?: boolean, userId?: string|null }} [options]
  * @returns {Promise<string>}
  */
-async function chat(userMessage, { useWiki = true } = {}) {
+async function chat(userMessage, { useWiki = true, userId = null } = {}) {
   const token = process.env.GH_MODELS_TOKEN;
   if (!token) {
     throw new Error("GH_MODELS_TOKEN is not set");
@@ -46,17 +64,29 @@ async function chat(userMessage, { useWiki = true } = {}) {
     }
   }
 
+  // Retrieve (or initialise) this user's conversation history
+  let history = [];
+  if (userId) {
+    if (!conversationHistory.has(userId)) {
+      conversationHistory.set(userId, []);
+    }
+    history = conversationHistory.get(userId);
+  }
+
   const client = ModelClient(ENDPOINT, new AzureKeyCredential(token));
 
   const response = await client.path("/chat/completions").post({
     body: {
       messages: [
         { role: "system", content: systemPrompt },
+        ...history,
         { role: "user", content: userMessage },
       ],
       temperature: 0.7,
       top_p: 1,
-      max_tokens: 1024,
+      // 2048 tokens allows richer, well-formatted Discord replies and handles
+      // longer conversation history without truncating the response.
+      max_tokens: 2048,
       model: MODEL,
     },
   });
@@ -84,7 +114,19 @@ async function chat(userMessage, { useWiki = true } = {}) {
     return FILTERED_REPLY;
   }
 
-  return choice.message.content;
+  const reply = choice.message.content;
+
+  // Persist the exchange in the user's conversation history
+  if (userId) {
+    history.push({ role: "user", content: userMessage });
+    history.push({ role: "assistant", content: reply });
+    // Keep only the most recent MAX_HISTORY_TURNS exchanges
+    if (history.length > MAX_HISTORY_TURNS * 2) {
+      history.splice(0, 2);
+    }
+  }
+
+  return reply;
 }
 
-module.exports = { chat, FILTERED_REPLY };
+module.exports = { chat, clearHistory, FILTERED_REPLY };
