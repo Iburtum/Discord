@@ -7,13 +7,17 @@ module.exports = {
 
   async execute(interaction) {
     await interaction.reply(
-      `📖 **أوامر بوت iburtum — iburtum Bot Commands**\n\n` +
-      `\`/setup\` — إعداد قناة المساعد الذكي (مشرفين فقط)\n` +
-      `\`/ask\` — اسأل المساعد الذكي عن EliteMobs\n` +
-      `\`/server\` — معلومات السيرفر و IP\n` +
-      `\`/help\` — عرض هذه القائمة\n\n` +
-      `💡 يمكنك أيضاً الكتابة مباشرة في قناة المساعد الذكي وسيرد عليك تلقائياً!\n` +
-      `💡 You can also type directly in the AI channel and I'll reply automatically!`
+      `## 🤖 iburtum — المساعد الذكي لـ Ramadan Craft\n\n` +
+      `**الأوامر المتاحة — Available Commands**\n\n` +
+      `⚙️ \`/setup\` — إعداد قناة المساعد الذكي *(مشرفين فقط / Admins only)*\n` +
+      `🧠 \`/ask\` — اسأل المساعد الذكي أي سؤال\n` +
+      `🌐 \`/server\` — معلومات السيرفر والـ IP\n` +
+      `📖 \`/help\` — عرض هذه القائمة\n` +
+      `🗺️ \`/wiki\` — ابحث في ويكي السيرفر\n\n` +
+      `---\n` +
+      `💡 **نصيحة:** يمكنك الكتابة مباشرة في قناة المساعد الذكي وسيرد عليك تلقائياً!\n` +
+      `💡 **Tip:** You can also type directly in the AI channel and I'll reply automatically!\n\n` +
+      `🌟 *iburtum — powered by GPT-4.1*`
     );
   },
 };
