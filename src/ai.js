@@ -12,9 +12,9 @@ const MODEL = "openai/gpt-4.1-mini";
  * @returns {Promise<string>}
  */
 async function chat(userMessage) {
-  const token = process.env.GITHUB_TOKEN;
+  const token = process.env.GH_MODELS_TOKEN;
   if (!token) {
-    throw new Error("GITHUB_TOKEN is not set");
+    throw new Error("GH_MODELS_TOKEN is not set");
   }
 
   const client = ModelClient(ENDPOINT, new AzureKeyCredential(token));

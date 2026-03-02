@@ -24,8 +24,11 @@ A bilingual (Arabic / English) Discord bot that answers questions about EliteMob
    ```
    DISCORD_TOKEN=your_discord_bot_token
    CLIENT_ID=your_application_client_id
-   GITHUB_TOKEN=your_github_pat
+   GH_MODELS_TOKEN=your_github_pat_with_models_read_permission
    ```
+
+   > **Note:** Use a GitHub fine-grained PAT with the **Models (read)** permission.
+   > Do **not** name this variable `GITHUB_TOKEN` — that name is reserved by GitHub Actions / Codespaces and would be silently overridden with a token that lacks Models access.
 
 3. **Register slash commands**
    ```bash
